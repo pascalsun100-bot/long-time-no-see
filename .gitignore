@@ -1,0 +1,6 @@
+.env
+*.token
+.server-token
+__pycache__/
+*.pyc
+*.log

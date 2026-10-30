@@ -1,0 +1,19 @@
+# Example only. Before enabling, point TLS certificate paths at YOUR certificate.
+# Terminate HTTPS in Nginx and keep PowerContext bound to 127.0.0.1:8000.
+server {
+    listen 443 ssl;
+    server_name memory.example.com;
+    ssl_certificate /etc/ssl/example/fullchain.pem;
+    ssl_certificate_key /etc/ssl/example/privkey.pem;
+    location = /v1/context/prepare {
+        limit_except POST { deny all; }
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Authorization $http_authorization;
+    }
+    location = /v1/memory/remember {
+        limit_except POST { deny all; }
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Authorization $http_authorization;
+    }
+    location / { return 404; }
+}
